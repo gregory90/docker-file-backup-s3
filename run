@@ -1,0 +1,51 @@
+#!/bin/bash -e
+
+if [ -z "$TIMEOUT" ] ; then
+    TIMEOUT=86400
+fi
+
+if [ -z "$DATADIR" ] ; then
+    echo "DATADIR not specified"
+fi
+
+if [ -z "$ACCESS_KEY" ] ; then
+    echo "ACCESS_KEY not specified"
+    exit 1
+fi
+
+if [ -z "$SECRET_KEY" ] ; then
+    echo "SECRET_KEY not specified"
+    exit 1
+fi
+
+if [ -z "$BUCKET" ] ; then
+    echo "BUCKET not specified"
+    exit 1
+fi
+
+
+backup_and_stream_to_s3() {
+  while true
+  do
+    echo "Clean"
+    rm -rf /backup/*
+    echo "Backup"
+    cp -r $DATADIR/* /backup
+
+    BACKUP=`date +"%Y-%m-%d_%H-%M-%S"`
+
+    tar -cf /backup/$BACKUP.tar /backup/*
+    gzip -7 /backup/$BACKUP.tar
+
+    echo "Upload $BACKUP"
+    s3cmd --access_key="$ACCESS_KEY" --secret_key="$SECRET_KEY" \
+          -c /dev/null $S3CMD_OPTS put "/backup/$BACKUP.tar.gz" $BUCKET/$BACKUP.tar.gz
+
+    echo "Sleep"
+    sleep $TIMEOUT
+  done
+}
+
+backup_and_stream_to_s3
+
+wait
