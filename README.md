@@ -23,5 +23,5 @@ docker run -v DIRECTORY_TO_RESTORE_TO:/backup gregory90/file-backup-s3 /app/rest
 DATADIR - directory from which perform backup (other than /backup),  
 ACCESS_KEY - AWS S3 access key,  
 SECRET_KEY - AWS S3 secret key,  
-FILE - file to restore,  
+FILE - file to restore (without extension),  
 BUCKET - AWS S3 bucket for backup.
