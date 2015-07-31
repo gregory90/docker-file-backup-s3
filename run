@@ -4,10 +4,6 @@ if [ -z "$TIMEOUT" ] ; then
     TIMEOUT=86400
 fi
 
-if [ -z "$DATADIR" ] ; then
-    echo "DATADIR not specified"
-fi
-
 if [ -z "$ACCESS_KEY" ] ; then
     echo "ACCESS_KEY not specified"
     exit 1
@@ -23,6 +19,7 @@ if [ -z "$BUCKET" ] ; then
     exit 1
 fi
 
+DATADIR="/data"
 
 backup_and_stream_to_s3() {
   while true

@@ -1,8 +1,5 @@
 #!/bin/bash -e
 
-if [ -z "$DATADIR" ] ; then
-    echo "DATADIR not specified"
-fi
 
 if [ -z "$ACCESS_KEY" ] ; then
     echo "ACCESS_KEY not specified"
@@ -23,6 +20,8 @@ if [ -z "$FILE" ] ; then
     echo "FILE not specified"
     exit 1
 fi
+
+DATADIR="/data"
 
 echo "Restoring $FILE"
 s3cmd --access_key="$ACCESS_KEY" --secret_key="$SECRET_KEY" \
